@@ -1,5 +1,7 @@
 #include "get_next_line.h"
 
+#include <stdio.h>
+
 char	*ft_strchr(const char *s, int c)
 {
 	char	ch;
@@ -43,15 +45,20 @@ char	*get_next_line(int fd)
 {
 	size_t		len;
 	int			r;
-	char		buf[BUFFER_SIZE + 1];
+	static int	start;
+	static char		buf[BUFFER_SIZE];
 	char		*str;
 	char		*line_end;
 
-	r = read(fd, buf, BUFFER_SIZE);
-	buf[r] = '\0';
+	if (buf[start] == '\0')
+		r = read(fd, buf, BUFFER_SIZE - 1);
+		buf[r] = '\0';
 	line_end = ft_strchr(buf, '\n');
+	printf("buf:\n%s", &buf[start]);
 	if (line_end == NULL)
 	{
+		// reaching here means no NL found.
+		// refill buffer.
 		return (NULL);
 	}
 	else
@@ -60,13 +67,12 @@ char	*get_next_line(int fd)
 		len = line_end - buf + 1;
 		// make 1 space for nul-terminate
 		str = malloc(sizeof(char) * len + 1);
-		ft_strlcpy(str , buf, len + 1);
-		str[len] = '\0';
+		ft_strlcpy(str , &buf[start], len + 1);
+		start += len;
 	}
 	return (str);
 }
 
-#include <stdio.h>
 void main()
 {
 	char	*str;
@@ -75,7 +81,12 @@ void main()
 	str = get_next_line(fileno(out));
 	if (str == NULL)
 		return;
-	printf("%s\n", str);
+	printf("1st line: %s\n", str);
+	free(str);
+	str = get_next_line(fileno(out));
+	if (str == NULL)
+		return;
+	printf("2nd line: %s\n", str);
 	free(str);
 	fclose(out);
 }
