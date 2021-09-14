@@ -43,23 +43,26 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 // 		 handle weird cases.		 
 char	*get_next_line(int fd)
 {
-	size_t		len;
-	int			r;
-	static int	start;
-	static char		buf[BUFFER_SIZE];
-	char		*str;
-	char		*line_end;
+	size_t			len;
+	int				r;
+	static int		start;
+	static char		buf[BUFFER_SIZE + 1];
+	char			*str;
+	char			*line_end;
 
-	if (buf[start] == '\0')
-		r = read(fd, buf, BUFFER_SIZE - 1);
+	if (start == 0)
+		r = read(fd, buf, BUFFER_SIZE);
 		buf[r] = '\0';
 	line_end = ft_strchr(buf, '\n');
-	printf("buf:\n%s", &buf[start]);
+	//printf("buf:\n%s", buf);
+	len = 0;
 	if (line_end == NULL)
 	{
-		// reaching here means no NL found.
-		// refill buffer.
-		return (NULL);
+		len = BUFFER_SIZE - start;
+		start = 0;
+		r = read(fd, buf, BUFFER_SIZE);
+		buf[r] = '\0';
+		line_end = ft_strchr(buf, '\n');
 	}
 	else
 	{
@@ -90,3 +93,36 @@ void main()
 	free(str);
 	fclose(out);
 }
+
+// char	*get_next_line(int fd)
+// {
+// 	size_t			len;
+// 	int				r;
+// 	static int		start;
+// 	static char		buf[BUFFER_SIZE + 1];
+// 	char			*str;
+// 	char			*line_end;
+
+// 	while(1)
+// 	{
+// 		r = read(fd, buf, BUFFER_SIZE);
+// 		if (r == 0)
+// 			break ;
+// 		buf[BUFFER_SIZE] = '\0';
+// 		line_end = ft_strchr(buf, '\n');
+// 		len = 0;
+// 		while (line_end == NULL)
+// 		{
+// 			len += BUFFER_SIZE - start;
+// 			start = 0;
+// 			free(str);
+// 			str = (char *)malloc(sizeof(char) * (len + 1))
+// 			r = read(fd, buf, BUFFER_SIZE);
+// 			if (r == 0)
+// 				break ;
+// 			line_end = ft_strchr(buf, '\n');
+// 		}
+
+// 	}
+// 	return (str);
+// }
