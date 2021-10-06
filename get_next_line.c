@@ -51,9 +51,9 @@ size_t	ft_strlcat(char *dst, const char *src, size_t size)
 // Vacated space on the right set to zero.
 char	*ft_memcpy_rclr(char *dst, char *src, size_t n)
 {
-	char unsigned	*ds;
-	char unsigned	*sr;
-	size_t			len;
+	char	*ds;
+	char	*sr;
+	size_t	len;
 
 	if (!dst && !src)
 		return (NULL);
