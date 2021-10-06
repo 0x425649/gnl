@@ -1,7 +1,5 @@
 #include "get_next_line.h"
 
-#include <stdio.h>
-
 char	*ft_strchr(const char *s, int c)
 {
 	char	ch;
@@ -121,27 +119,4 @@ char	*get_next_line(int fd)
 	// shift left by 
 	ft_memcpy_rclr(sink, needle + 1, 4096 - (needle - sink + 1) + 1);
 	return (temp);
-}
-
-void main()
-{
-	char	*str;
-	FILE *out=fopen("./other/b.txt","r");
-
-	str = get_next_line(fileno(out));
-	if (str == NULL)
-		return;
-	printf("1st line: %s", str);
-	free(str);
-	str = get_next_line(fileno(out));
-	if (str == NULL)
-		return;
-	printf("2nd line: %s", str);
-	free(str);
-	str = get_next_line(fileno(out));
-	if (str == NULL)
-		return;
-	printf("3rd line: %s", str);
-	free(str);
-	fclose(out);
 }
