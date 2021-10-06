@@ -68,6 +68,23 @@ char	*ft_memcpy_rclr(char *dst, char *src, size_t n)
 		*sr-- = '\0';
 	return (dst);
 }
+
+char	*ft_strdup(const char *s)
+{
+	int		len;
+	char	*dup;
+
+	len = 0;
+	while (s[len])
+		++len;
+	dup = (char *)malloc(len + 1);
+	if (!dup)
+		return (NULL);
+	dup[len] = '\0';
+	while (--len >= 0)
+		dup[len] = s[len];
+	return (dup);
+}
 		 
 char	*get_next_line(int fd)
 {
@@ -82,10 +99,8 @@ char	*get_next_line(int fd)
 		// most likely EOF
 		if (!read(fd, buf, BUFFER_SIZE))
 		{
-			//malloc
-			//return copy sink
-			printf("eof %s\n", sink);
-			return (NULL);
+			temp = ft_strdup(sink);
+			return (temp);
 		}
 		ft_strlcat(sink, buf, 4096);
 		needle = ft_strchr(sink, '\n');
