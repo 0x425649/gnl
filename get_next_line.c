@@ -112,13 +112,14 @@ char	*get_next_line(int fd)
 		// found match
 		break ;
 	}
-	temp = malloc((needle - sink) + 1);
+	// 1 space for \n itself, 1 space for \0
+	temp = malloc((needle - sink + 1) + 1);
 	if (temp == NULL)
 		return (NULL);
-	temp[needle - sink] = '\0';
-	ft_strlcat(temp, sink, (needle - sink) + 1);
+	temp[needle - sink + 1] = '\0';
+	ft_strlcat(temp, sink, (needle - sink + 1) + 1);
 	// shift left by 
-	ft_memcpy_rclr(sink, needle + 1, 4096 - (needle - sink + 1));
+	ft_memcpy_rclr(sink, needle + 1, 4096 - (needle - sink + 1) + 1);
 	return (temp);
 }
 
@@ -130,12 +131,17 @@ void main()
 	str = get_next_line(fileno(out));
 	if (str == NULL)
 		return;
-	printf("1st line: %s\n", str);
+	printf("1st line: %s", str);
 	free(str);
 	str = get_next_line(fileno(out));
 	if (str == NULL)
 		return;
-	printf("2nd line: %s\n", str);
+	printf("2nd line: %s", str);
+	free(str);
+	str = get_next_line(fileno(out));
+	if (str == NULL)
+		return;
+	printf("3rd line: %s", str);
 	free(str);
 	fclose(out);
 }
