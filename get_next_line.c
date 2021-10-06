@@ -126,7 +126,7 @@ char	*get_next_line(int fd)
 void main()
 {
 	char	*str;
-	FILE *out=fopen("b.txt","r");
+	FILE *out=fopen("./other/b.txt","r");
 
 	str = get_next_line(fileno(out));
 	if (str == NULL)
